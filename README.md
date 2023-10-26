@@ -1,6 +1,6 @@
 
 Playground: https://www.katacoda.com/scenario-examples/courses/environment-usages/nodejs
-
+#Use npm
 1. If we run it in playground, update node version
 ```
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
@@ -49,9 +49,11 @@ npm run dev
 5. Goto: http://localhost:3000
 
 ---
+#Use yarn
+```
+git clone https://github.com/semaphore-protocol/boilerplate
+cd boilerplate
 npm install -g yarn
 yarn
-
-
-
 yarn dev
+```
