@@ -58,3 +58,4 @@ npm install -g yarn
 yarn
 yarn dev
 ```
+Goto: http://localhost:3000
