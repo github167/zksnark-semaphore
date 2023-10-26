@@ -1,12 +1,14 @@
 
 Playground: https://www.katacoda.com/scenario-examples/courses/environment-usages/nodejs
-If we run it in playground, update node version
+
+1. If we run it in playground, update node version
 ```
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
 source ~/.bashrc
 nvm install node
 ```
-Git clone and install
+
+2. Git clone and install
 ```
 git clone https://github.com/semaphore-protocol/boilerplate
 cd boilerplate
