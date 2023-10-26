@@ -47,8 +47,8 @@ npm run dev
 ```
 
 5. Goto: http://localhost:3000
-6. 
-=====
+
+---
 npm install -g yarn
 yarn
 
