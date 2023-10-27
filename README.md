@@ -74,6 +74,7 @@ npm install snarkjs
 curl https://www.trusted-setup-pse.org/semaphore/20/semaphore.zkey --output semaphore.zkey
 curl https://www.trusted-setup-pse.org/semaphore/20/semaphore.wasm --output semaphore.wasm
 curl https://raw.githubusercontent.com/semaphore-protocol/semaphore/main/packages/data/src/semaphoreABI.json --output semaphoreABI.json
+curl https://raw.githubusercontent.com/github167/zksnark-semaphore/main/semo-cli.mjs --output semo-cli.mjs
 
 ```
 2. Run the standalone mjs
