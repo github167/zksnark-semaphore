@@ -70,9 +70,15 @@ Goto: http://localhost:3000
 1. Download zkey, wasm and abi (location: boilerplate/apps/contracts/scripts/dwonload-snark-artifacts.ts)
 ```
 cd apps/web-app
+npm install snarkjs
 curl https://www.trusted-setup-pse.org/semaphore/20/semaphore.zkey --output semaphore.zkey
 curl https://www.trusted-setup-pse.org/semaphore/20/semaphore.wasm --output semaphore.wasm
 curl https://raw.githubusercontent.com/semaphore-protocol/semaphore/main/packages/data/src/semaphoreABI.json --output semaphoreABI.json
+
+```
+2. Run the standalone mjs
+```
+node semo-cli.mjs
 
 ```
 
