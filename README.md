@@ -66,10 +66,13 @@ Goto: http://localhost:3000
 
 ---
 # Use standalone mjs
+
 1. Download zkey, wasm and abi (location: boilerplate/apps/contracts/scripts/dwonload-snark-artifacts.ts)
-- https://www.trusted-setup-pse.org/semaphore/20/semaphore.zkey
-- https://www.trusted-setup-pse.org/semaphore/20/semaphore.wasm
-- https://github.com/semaphore-protocol/semaphore/blob/main/packages/data/src/semaphoreABI.json
+```
+cd apps/web-app
+curl https://www.trusted-setup-pse.org/semaphore/20/semaphore.zkey --output semaphore.zkey
+curl https://www.trusted-setup-pse.org/semaphore/20/semaphore.wasm --output semaphore.wasm
+curl https://github.com/semaphore-protocol/semaphore/blob/main/packages/data/src/semaphoreABI.json --output semaphoreABI.json
 
+```
 
-save to the boilerplate/apps/contracts/build/snark-artifacts
