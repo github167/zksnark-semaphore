@@ -63,3 +63,11 @@ yarn dev
 
 ```
 Goto: http://localhost:3000
+
+---
+# Use standalone mjs
+Download zkey and wasm (location: boilerplate/apps/contracts/scripts/dwonload-snark-artifacts.ts)
+
+https://www.trusted-setup-pse.org/semaphore/20/semaphore.zkey
+https://www.trusted-setup-pse.org/semaphore/20/semaphore.wasm
+
