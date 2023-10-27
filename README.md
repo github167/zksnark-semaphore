@@ -7,6 +7,7 @@ Playground: https://www.katacoda.com/scenario-examples/courses/environment-usage
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
 source ~/.bashrc
 nvm install node
+
 ```
 
 2. Git clone and install
@@ -29,11 +30,13 @@ ETHERSCAN_API_KEY=
 EOF
 
 npm install
+
 ```
 
 3. In terminal 1
 ```
 npx hardhat node
+
 ```
 
 4. In terminal 2
@@ -44,6 +47,7 @@ npx hardhat deploy --network localhost --group 49
 
 cd ../web-app
 npm run dev
+
 ```
 
 5. Goto: http://localhost:3000
@@ -56,5 +60,6 @@ cd boilerplate
 npm install -g yarn
 yarn
 yarn dev
+
 ```
 Goto: http://localhost:3000
