@@ -30,6 +30,7 @@ ETHERSCAN_API_KEY=
 EOF
 
 npm install
+cd apps/contracts
 
 ```
 
@@ -41,7 +42,6 @@ npx hardhat node
 
 4. In terminal 2
 ```
-cd apps/contracts
 npx hardhat compile
 npx hardhat deploy --network localhost --group 49
 
