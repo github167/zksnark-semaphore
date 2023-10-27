@@ -72,7 +72,7 @@ Goto: http://localhost:3000
 cd apps/web-app
 curl https://www.trusted-setup-pse.org/semaphore/20/semaphore.zkey --output semaphore.zkey
 curl https://www.trusted-setup-pse.org/semaphore/20/semaphore.wasm --output semaphore.wasm
-curl https://github.com/semaphore-protocol/semaphore/blob/main/packages/data/src/semaphoreABI.json --output semaphoreABI.json
+curl https://raw.githubusercontent.com/semaphore-protocol/semaphore/main/packages/data/src/semaphoreABI.json --output semaphoreABI.json
 
 ```
 
