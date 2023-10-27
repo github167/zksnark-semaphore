@@ -66,8 +66,9 @@ Goto: http://localhost:3000
 
 ---
 # Use standalone mjs
-Download zkey and wasm (location: boilerplate/apps/contracts/scripts/dwonload-snark-artifacts.ts)
+1. Download zkey and wasm (location: boilerplate/apps/contracts/scripts/dwonload-snark-artifacts.ts)
 ```
+# cd boiletplate/apps/contracts
 npm run download:snark-artifacts
 
 ```
@@ -75,3 +76,4 @@ or download from the following two links
 - https://www.trusted-setup-pse.org/semaphore/20/semaphore.zkey
 - https://www.trusted-setup-pse.org/semaphore/20/semaphore.wasm
 
+save to the boilerplate/apps/contracts/build/snark-artifacts
