@@ -175,36 +175,41 @@ async function main() {
 	//console.log(await getGroupVerifiedProofs(GROUP_ID))
 	
 	var id = id_secret?new Identity(id_secret):new Identity();
-	console.log(`id is ${id.commitment}`)
+	console.log(`id is ${id.commitment}`);
 	
 
 	switch(task) {
-		case 1:
-			console.log(await getGroupMembers(GROUP_ID))
-			break
-		case 2:
-			await joinId(id)
-			console.log(`joining ${id.commitment}...`)
-			break
-		case 3:
+		case 1: {
+			console.log(await getGroupMembers(GROUP_ID));
+			break;
+		}
+		case 2: {
+			await joinId(id);
+			console.log(`joining ${id.commitment}...`);
+			break;
+		}
+		case 3: {
 			var _users = await getGroupMembers(GROUP_ID)
 			var message = (new Date()).toLocaleTimeString();
 			console.log(`${id.commitment} send message ${message}`)
 			await sendFeebackId(_users, id, message)
 			break
-		case 4:
-			var proofs = await getGroupVerifiedProofs(GROUP_ID)
-			var signals = proofs.map(({signal}) => utils.parseBytes32String(BigNumber.from(signal).toHexString()))
+		}
+		case 4: {
+			var proofs = await getGroupVerifiedProofs(GROUP_ID);
+			var signals = proofs.map(({signal}) => utils.parseBytes32String(BigNumber.from(signal).toHexString()));
 			console.log(signals)
-			break
-		case 5:
+			break;
+		}
+		case 5: {
 			var temp_id=new Identity();
 			await joinId(temp_id);
-			var _users = await getGroupMembers(GROUP_ID)
+			var _users = await getGroupMembers(GROUP_ID);
 			var message = (new Date()).toLocaleTimeString();
-			console.log(`${temp_id.commitment} send message ${message}`)
-			await sendFeebackId(_users, temp_id, message)
+			console.log(`${temp_id.commitment} send message ${message}`);
+			await sendFeebackId(_users, temp_id, message);
 			break;
+		}
 			
 	}
 
