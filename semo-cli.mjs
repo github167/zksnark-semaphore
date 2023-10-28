@@ -180,7 +180,10 @@ async function main() {
 
 	switch(task) {
 		case 1: {
-			console.log(await getGroupMembers(GROUP_ID));
+			console.log(await getGroupMembers(GROUP_ID));			
+			var proofs = await getGroupVerifiedProofs(GROUP_ID);
+			var signals = proofs.map(({signal}) => utils.parseBytes32String(BigNumber.from(signal).toHexString()));
+			console.log(signals)
 			break;
 		}
 		case 2: {
