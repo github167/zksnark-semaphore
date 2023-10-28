@@ -29,19 +29,32 @@ ETHERSCAN_API_KEY=
 
 EOF
 
+cd apps
+mkdir mycli && cd mycli
+npm init -y
+cp -r ../web-app/contract-artifacts/ .
+curl https://www.trusted-setup-pse.org/semaphore/20/semaphore.zkey --output semaphore.zkey
+curl https://www.trusted-setup-pse.org/semaphore/20/semaphore.wasm --output semaphore.wasm
+curl https://raw.githubusercontent.com/semaphore-protocol/semaphore/main/packages/data/src/semaphoreABI.json --output semaphoreABI.json
+curl https://raw.githubusercontent.com/github167/zksnark-semaphore/main/semo-cli.mjs --output semo-cli.mjs
+cd ../..
+
 npm install
-cd apps/contracts
+cd apps/mycli
+npm install snarkjs
 
 ```
 
 3. In terminal 1
 ```
+#cd boilerplate/apps/contracts
 npx hardhat node
 
 ```
 
 4. In terminal 2
 ```
+cd ../contracts
 npx hardhat compile
 npx hardhat deploy --network localhost --group 49
 
@@ -50,7 +63,14 @@ npm run dev
 
 ```
 
-5. Goto: http://localhost:3000
+5. Use web: http://localhost:3000
+
+6. Use cli
+```
+cd ../mycli
+node semo-cli.mjs
+
+```
 
 ---
 # Use yarn
@@ -64,22 +84,5 @@ yarn dev
 ```
 Goto: http://localhost:3000
 
----
-# Use standalone mjs
 
-1. Download zkey, wasm and abi (location: boilerplate/apps/contracts/scripts/dwonload-snark-artifacts.ts)
-```
-cd apps/web-app
-npm install snarkjs
-curl https://www.trusted-setup-pse.org/semaphore/20/semaphore.zkey --output semaphore.zkey
-curl https://www.trusted-setup-pse.org/semaphore/20/semaphore.wasm --output semaphore.wasm
-curl https://raw.githubusercontent.com/semaphore-protocol/semaphore/main/packages/data/src/semaphoreABI.json --output semaphoreABI.json
-curl https://raw.githubusercontent.com/github167/zksnark-semaphore/main/semo-cli.mjs --output semo-cli.mjs
-
-```
-2. Run the standalone mjs
-```
-node semo-cli.mjs
-
-```
 
