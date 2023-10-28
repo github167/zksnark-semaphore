@@ -74,17 +74,3 @@ node semo-cli.mjs 1
 
 ```
 
----
-# Use yarn
-```
-git clone https://github.com/semaphore-protocol/boilerplate
-cd boilerplate
-npm install -g yarn
-yarn
-yarn dev
-
-```
-Goto: http://localhost:3000
-
-
-
