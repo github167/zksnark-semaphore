@@ -155,10 +155,6 @@ async function sendFeebackId(users, identity, message) {
 
 	var group = new Group(GROUP_ID)
 	await group.addMembers(users) 
-console.log(identity);
-console.log(group);
-console.log(GROUP_ID);
-console.log(signal);
 	var pf = await generateProof(identity, group, GROUP_ID, signal, {wasmFilePath: "semaphore.wasm", zkeyFilePath: "semaphore.zkey"})
 
 	var result = await verifyProof(pf, 20)
