@@ -173,11 +173,6 @@ async function main() {
 	//console.log(await getGroup(GROUP_ID))
 	//console.log(await getGroupMembers(GROUP_ID))
 	//console.log(await getGroupVerifiedProofs(GROUP_ID))
-	
-	var id = id_secret?new Identity(id_secret):new Identity();
-	console.log(`id is ${id.commitment}`);
-	
-
 	switch(task) {
 		case 1: {
 			console.log(await getGroupMembers(GROUP_ID));			
@@ -187,11 +182,13 @@ async function main() {
 			break;
 		}
 		case 2: {
+			var id = new Identity(id_secret);
 			await joinId(id);
 			console.log(`joining ${id.commitment}...`);
 			break;
 		}
 		case 3: {
+			var id = new Identity(id_secret);
 			var _users = await getGroupMembers(GROUP_ID)
 			var message = (new Date()).toLocaleTimeString();
 			console.log(`${id.commitment} send message ${message}`)
@@ -199,12 +196,6 @@ async function main() {
 			break
 		}
 		case 4: {
-			var proofs = await getGroupVerifiedProofs(GROUP_ID);
-			var signals = proofs.map(({signal}) => utils.parseBytes32String(BigNumber.from(signal).toHexString()));
-			console.log(signals)
-			break;
-		}
-		case 5: {
 			var id=new Identity();
 			await joinId(id);
 			var _users = await getGroupMembers(GROUP_ID);
