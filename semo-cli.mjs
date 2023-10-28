@@ -209,7 +209,7 @@ async function main() {
 			console.log(`${id.commitment} send message ${message}`);
 			await sendFeebackId(_users, id, message);
 			var proofs = await getGroupVerifiedProofs(GROUP_ID);
-			cosnole.log(proofs);
+			console.log(proofs);
 			var signals = proofs.map(({signal}) => utils.parseBytes32String(BigNumber.from(signal).toHexString()));
 			console.log(signals);
 			
