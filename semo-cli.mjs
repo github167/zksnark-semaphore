@@ -204,6 +204,7 @@ async function main() {
 			var message = (new Date()).toLocaleTimeString();
 			console.log(`${temp_id.commitment} send message ${message}`)
 			await sendFeebackId(_users, temp_id, message)
+			break;
 			
 	}
 
