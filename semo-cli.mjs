@@ -197,6 +197,14 @@ async function main() {
 			var signals = proofs.map(({signal}) => utils.parseBytes32String(BigNumber.from(signal).toHexString()))
 			console.log(signals)
 			break
+		case 5:
+			var temp_id=new Identity();
+			await joinId(temp_id);
+			var _users = await getGroupMembers(GROUP_ID)
+			var message = (new Date()).toLocaleTimeString();
+			console.log(`${temp_id.commitment} send message ${message}`)
+			await sendFeebackId(_users, temp_id, message)
+			
 	}
 
 	
