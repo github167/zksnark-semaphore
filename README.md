@@ -70,7 +70,7 @@ npm run dev
 7. Use cli
 ```
 cd ../mycli
-node semo-cli.mjs
+node semo-cli.mjs 1
 
 ```
 
