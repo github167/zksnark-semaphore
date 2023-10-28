@@ -19,7 +19,7 @@ import sem from "./semaphoreABI.json" assert { type: "json" }
 const GROUP_ID="49"
 const network_index = 0
 const id_secret = "hello5"
-const task = 1
+const task = parseInt(process.argv[2])
  
 const network_profile = [
 {
