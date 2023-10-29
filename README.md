@@ -73,4 +73,5 @@ cd ../mycli
 node semo-cli.mjs 1
 
 ```
-
+---
+# refer to mycircuit for circom testing
