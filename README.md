@@ -74,4 +74,4 @@ node semo-cli.mjs 1
 
 ```
 ---
-8. refer to [mycircuit](https://github.com/github167/zksnark-semaphore/tree/main/mycircuit) for circom testing
+8. refer to [mycircuit](mycircuit) for circom testing
