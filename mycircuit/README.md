@@ -55,5 +55,27 @@ snarkjs groth16 verify ../verification_key.json public.json proof.json
 ```
 snarkjs zkey export solidityverifier ../semaphore_0001.zkey verifier.sol
 snarkjs generatecall
+---
+
+Use zkrepl
+1. update node version in playground
+```
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
+source ~/.bashrc
+nvm install node
+
+```
+2. install zkrepl
+```
+git clone https://github.com/0xPARC/zkrepl
+cd zkrepl
+npm install -g yarn
+yarn
+replace src/example.circom with your file
+
+```
+3. launch website
+```
+yarn dev --host
 
 ```
