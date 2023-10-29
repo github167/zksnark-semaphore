@@ -16,6 +16,7 @@ cargo build --release
 cargo install --path circom
 
 ```
+
 2. create and compile circuit
 ```
 cd ~
@@ -39,6 +40,7 @@ snarkjs zkey contribute semaphore_0000.zkey semaphore_0001.zkey --name="1st Cont
 snarkjs zkey export verificationkey semaphore_0001.zkey verification_key.json
 
 ```
+
 4. create proof and verify
 ```
 cd semaphore_js
@@ -48,6 +50,7 @@ snarkjs groth16 prove ../semaphore_0001.zkey witness.wtns proof.json public.json
 snarkjs groth16 verify ../verification_key.json public.json proof.json
 
 ```
+
 5. generate sol
 ```
 snarkjs zkey export solidityverifier ../semaphore_0001.zkey verifier.sol
