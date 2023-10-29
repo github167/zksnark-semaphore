@@ -55,8 +55,9 @@ snarkjs groth16 verify ../verification_key.json public.json proof.json
 ```
 snarkjs zkey export solidityverifier ../semaphore_0001.zkey verifier.sol
 snarkjs generatecall
----
 
+```
+---
 Use zkrepl
 1. update node version in playground
 ```
