@@ -72,10 +72,10 @@ git clone https://github.com/0xPARC/zkrepl
 cd zkrepl
 npm install -g yarn
 yarn
-replace src/example.circom with your file
 
 ```
-3. launch website
+3. replace src/example.circom with your file
+4. launch website
 ```
 yarn dev --host
 
