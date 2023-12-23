@@ -59,6 +59,7 @@ npx hardhat compile
 npx hardhat deploy --network localhost --group 49
 
 # start the web server
+cd ../web-app
 npm run dev
 
 ```
