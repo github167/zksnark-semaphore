@@ -66,7 +66,6 @@ npm run dev
 3. Or use cli
 ```
 cd boilerplate/apps/mycli
-#npm run dev
 node semo-cli.mjs 1
 
 ```
