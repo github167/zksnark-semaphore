@@ -47,29 +47,26 @@ npm install snarkjs
 
 3. In terminal 1: start blockchain
 ```
-#cd boilerplate/apps/contracts
+cd boilerplate/apps/contracts
 npx hardhat node
 
 ```
 
-4. In terminal 2: deploy contract
+4. In terminal 2: deploy contract and start web http://localhost:3000
 ```
-cd ../contracts
+cd boilerplate/apps/contracts
 npx hardhat compile
 npx hardhat deploy --network localhost --group 49
 
-```
-
-5. Use web: http://localhost:3000
-```
-cd ../web-app
+# start the web server
 npm run dev
 
 ```
 
-7. Use cli
+3. Or use cli
 ```
-cd ../mycli
+cd boilerplate/apps/mycli
+#npm run dev
 node semo-cli.mjs 1
 
 ```
