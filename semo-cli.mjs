@@ -150,8 +150,7 @@ async function joinId(identity) {
 async function sendFeebackId(users, identity, message) {
     const signer = new Wallet(ethereumPrivateKey, provider)
     const contract = new Contract(feedbackAddress, Feedback.abi, signer)	
-	
-	var signal = BigNumber.from(utils.formatBytes32String(message)).toString()
+	var signal = BigInt(ethers.encodeBytes32String(message)).toString()
 
 	var group = new Group(GROUP_ID)
 	await group.addMembers(users) 
@@ -178,7 +177,7 @@ async function main() {
 		case 1: {
 			console.log(await semaphore.getGroupMembers(GROUP_ID));			
 			var proofs = await semaphore.getGroupValidatedProofs(GROUP_ID);
-			var signals = proofs.map(({signal}) => utils.parseBytes32String(BigNumber.from(signal).toHexString()));
+			var signals = proofs.map(({signal}) => ethers.parseBytes32String(BigInt(signal).toHexString()));
 			console.log(signals)
 			break;
 		}
@@ -205,7 +204,7 @@ async function main() {
 			await sendFeebackId(_users, id, message);
 			var proofs = await getGroupVerifiedProofs(GROUP_ID);
 			//console.log(proofs);
-			var signals = proofs.map(({signal}) => utils.parseBytes32String(BigNumber.from(signal).toHexString()));
+			var signals = proofs.map(({signal}) => ethers.parseBytes32String(BigInt.from(signal).toHexString()));
 			console.log(signals);
 			
 			break;
