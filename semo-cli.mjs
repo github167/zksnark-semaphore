@@ -16,7 +16,7 @@ import sem from "./artifacts/@semaphore-protocol/contracts/Semaphore.sol/Semapho
 //const identity3 = new Identity(identity1.toString())
 //const { trapdoor, nullifier, commitment, secret } = identity2
 
-const GROUP_ID="49"
+const GROUP_ID="0"
 const network_index = 0
 const id_secret = "hello5"
 const task = parseInt(process.argv[2])
@@ -24,11 +24,11 @@ const task = parseInt(process.argv[2])
 const network_profile = [
 {
 	network: "http://127.0.0.1:8545",
-	semaphoreAddress: "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9",
-	feedbackAddress: "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707",
+	semaphoreAddress: "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+	feedbackAddress: "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
 	startBlock: 0,
 	providerStr: "",
-	provider: new providers.JsonRpcProvider("http://127.0.0.1:8545"),
+	provider: new ethers.JsonRpcProvider("http://127.0.0.1:8545"),
 	ethereumPrivateKey: "ac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
 },
 {
@@ -37,7 +37,7 @@ const network_profile = [
 	feedbackAddress: "0x56FbaFEbeEf6562a4BdaCA2C16d315e6f08E9B9c",
 	startBlock: 3231111,
 	providerStr: "infura",
-	provider: new providers.InfuraProvider("sepolia", "xxx"),
+	provider: new ethers.InfuraProvider("sepolia", "xxx"),
 	ethereumPrivateKey: "xxx"	
 }
 ]
@@ -53,7 +53,7 @@ async function getEvents(contract, eventName, filterArgs, startBlock) {
 
 async function getGroup(groupId) {
     const signer = new Wallet(ethereumPrivateKey, provider)
-    const contract = new Contract(semaphoreAddress, sem, signer)
+    const contract = new Contract(semaphoreAddress, sem.abi, signer)
 	const groups = await getEvents(contract, "GroupCreated", [groupId], startBlock)
 
 	return groups
@@ -61,7 +61,7 @@ async function getGroup(groupId) {
 
 async function getGroupIds() {
     const signer = new Wallet(ethereumPrivateKey, provider)
-    const contract = new Contract(semaphoreAddress, sem, signer)
+    const contract = new Contract(semaphoreAddress, sem.abi, signer)
 	const groups = await getEvents(contract, "GroupCreated", [], startBlock)
 
     return groups.map((event) => event[0].toString())
@@ -70,7 +70,7 @@ async function getGroupIds() {
 
 async function getGroupMembers(groupId) {
     const signer = new Wallet(ethereumPrivateKey, provider)
-    const contract = new Contract(semaphoreAddress, sem, signer)
+    const contract = new Contract(semaphoreAddress, sem.abi, signer)
 	const [groupCreatedEvent] = await getEvents(contract, "GroupCreated", [groupId], startBlock)
 
 	if (!groupCreatedEvent) {
@@ -111,7 +111,7 @@ async function getGroupMembers(groupId) {
 
 async function getGroupVerifiedProofs(groupId) {
     const signer = new Wallet(ethereumPrivateKey, provider)
-    const contract = new Contract(semaphoreAddress, sem, signer)
+    const contract = new Contract(semaphoreAddress, sem.abi, signer)
 	const [groupCreatedEvent] = await getEvents(contract, "GroupCreated", [groupId], startBlock)
 
     if (!groupCreatedEvent) {
@@ -131,7 +131,7 @@ async function getGroupVerifiedProofs(groupId) {
 
 async function getGroupAdmin(groupId) {
     const signer = new Wallet(ethereumPrivateKey, provider)
-    const contract = new Contract(semaphoreAddress, sem, signer)
+    const contract = new Contract(semaphoreAddress, sem.abi, signer)
 	const groupAdminUpdatedEvents = await getEvents(contract, "GroupAdminUpdated", [groupId], startBlock)
 
     if (groupAdminUpdatedEvents.length === 0) {
@@ -167,15 +167,17 @@ async function sendFeebackId(users, identity, message) {
 
 async function main() {
 	
-	//console.log(await getGroupAdmin(GROUP_ID))
-	//console.log(await getGroupIds())
-	//console.log(await getGroup(GROUP_ID))
-	//console.log(await getGroupMembers(GROUP_ID))
-	//console.log(await getGroupVerifiedProofs(GROUP_ID))
+	//var semaphore = new SemaphoreEthers(network, {address: semaphoreAddress, provider:providerStr, startBlock:startBlock})
+	//console.log(await semaphore.getGroupIds())
+	//console.log(await semaphore.getGroupAdmin(GROUP_ID))
+	//console.log(await semaphore.getGroup(GROUP_ID))
+	//console.log(await semaphore.getGroupMembers(GROUP_ID))	
+	//console.log(await semaphore.getGroupValidatedProofs(GROUP_ID)
+	
 	switch(task) {
 		case 1: {
-			console.log(await getGroupMembers(GROUP_ID));			
-			var proofs = await getGroupVerifiedProofs(GROUP_ID);
+			console.log(await semaphore.getGroupMembers(GROUP_ID));			
+			var proofs = await semaphore.getGroupValidatedProofs(GROUP_ID);
 			var signals = proofs.map(({signal}) => utils.parseBytes32String(BigNumber.from(signal).toHexString()));
 			console.log(signals)
 			break;
@@ -212,12 +214,7 @@ async function main() {
 	}
 
 	
-	//var semaphore = new SemaphoreEthers(network, {address: semaphoreAddress, provider:providerStr, startBlock:startBlock})
-	//console.log(await semaphore.getGroupIds())
-	//console.log(await semaphore.getGroupAdmin(GROUP_ID))
-	//console.log(await semaphore.getGroup(GROUP_ID))
-	//console.log(await semaphore.getGroupMembers(GROUP_ID))	
-	//console.log(await semaphore.getGroupVerifiedProofs(GROUP_ID)
+
 }
 
 main().then(()=>{process.exit(0)})
