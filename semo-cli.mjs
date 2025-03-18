@@ -1,12 +1,12 @@
-import { Identity } from "@semaphore-protocol/identity"
+import { Identity } from "@semaphore-protocol/core"
 import { SemaphoreEthers } from "@semaphore-protocol/data"
-import { BigNumber, utils } from "ethers"
-import { Group } from "@semaphore-protocol/group"
-import { generateProof, verifyProof } from "@semaphore-protocol/proof"
+//import { BigNumber, utils } from "ethers"
+import { Group } from "@semaphore-protocol/core"
+import { generateProof, verifyProof } from "@semaphore-protocol/core"
 import { groth16 } from "snarkjs"
 import { Contract, providers, Wallet } from "ethers"
-import Feedback from "./contract-artifacts/Feedback.json" assert { type: "json" }
-import sem from "./semaphoreABI.json" assert { type: "json" }
+import Feedback from "./artifacts/contracts/Feedback.sol/Feedback.json" assert { type: "json" }
+import sem from "./artifacts/@semaphore-protocol/contracts/Semaphore.sol/Semaphore.json" assert { type: "json" }
 
 
 
