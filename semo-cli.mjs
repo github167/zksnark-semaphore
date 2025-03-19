@@ -1,20 +1,8 @@
-import { Identity } from "@semaphore-protocol/core"
+import { Identity, generateProof, verifyProof, Group } from "@semaphore-protocol/core"
 import { SemaphoreEthers } from "@semaphore-protocol/data"
-//import { BigNumber, utils } from "ethers"
-import { Group } from "@semaphore-protocol/core"
-import { generateProof, verifyProof } from "@semaphore-protocol/core"
-import { groth16 } from "snarkjs"
-import { Contract, providers, Wallet } from "ethers"
+import { ethers, encodeBytes32String, decodeBytes32String, Contract, Wallet } from "ethers"
 import Feedback from "./artifacts/contracts/Feedback.sol/Feedback.json" assert { type: "json" }
 import sem from "./artifacts/@semaphore-protocol/contracts/Semaphore.sol/Semaphore.json" assert { type: "json" }
-
-
-
-//const identity1 = new Identity()
-//const identity2 = new Identity("secret-message")
-//["0x1b997696cf3fa02b8596940a37d19cd63dfc4677f6b7ff9196dea6152541e5d9", "0x19cf56c35d0e8e1d9e7a12a29552905288bf333b75c0f2592fcf23c033f46f96"]
-//const identity3 = new Identity(identity1.toString())
-//const { trapdoor, nullifier, commitment, secret } = identity2
 
 const GROUP_ID="0"
 const network_index = 0
@@ -44,103 +32,6 @@ const network_profile = [
 
 var {network,semaphoreAddress,feedbackAddress,startBlock,providerStr,provider,ethereumPrivateKey} = network_profile[network_index]
 
-
-async function getEvents(contract, eventName, filterArgs, startBlock) {
-	const filter = contract.filters[eventName](...filterArgs)
-	const events = await contract.queryFilter(filter, startBlock)
-	return events.map(({ args, blockNumber }) => ({ ...args, blockNumber }))
-}
-
-async function getGroup(groupId) {
-    const signer = new Wallet(ethereumPrivateKey, provider)
-    const contract = new Contract(semaphoreAddress, sem.abi, signer)
-	const groups = await getEvents(contract, "GroupCreated", [groupId], startBlock)
-
-	return groups
-}
-
-async function getGroupIds() {
-    const signer = new Wallet(ethereumPrivateKey, provider)
-    const contract = new Contract(semaphoreAddress, sem.abi, signer)
-	const groups = await getEvents(contract, "GroupCreated", [], startBlock)
-
-    return groups.map((event) => event[0].toString())
-}
-
-
-async function getGroupMembers(groupId) {
-    const signer = new Wallet(ethereumPrivateKey, provider)
-    const contract = new Contract(semaphoreAddress, sem.abi, signer)
-	const [groupCreatedEvent] = await getEvents(contract, "GroupCreated", [groupId], startBlock)
-
-	if (!groupCreatedEvent) {
-		throw new Error(`Group '${groupId}' not found`)
-	}
-
-	const zeroValue = groupCreatedEvent.zeroValue.toString()
-	const memberRemovedEvents = await getEvents(contract, "MemberRemoved", [groupId], startBlock)
-	const memberUpdatedEvents = await getEvents(contract, "MemberUpdated", [groupId], startBlock)
-	const memberAddedEvents = await getEvents(contract, "MemberAdded", [groupId], startBlock)
-
-
-	var groupUpdates = new Map();
-	
-	for (var { blockNumber, index, newIdentityCommitment } of memberUpdatedEvents) {
-            groupUpdates.set(index.toString(), [blockNumber, newIdentityCommitment.toString()])
-	}
-	
-    for (var { blockNumber, index } of memberRemovedEvents) {
-		const groupUpdate = groupUpdates.get(index.toString())
-
-        if (!groupUpdate || (groupUpdate && groupUpdate[0] < blockNumber)) {
-			groupUpdates.set(index.toString(), [blockNumber, zeroValue])
-        }
-    }
-	
-    var members = []
-
-    for (var { index, identityCommitment } of memberAddedEvents) {
-		const groupUpdate = groupUpdates.get(index.toString())
-		const member = groupUpdate ? groupUpdate[1].toString() : identityCommitment.toString()
-
-		members.push(member)
-	}
-
-	return members
-}
-
-async function getGroupVerifiedProofs(groupId) {
-    const signer = new Wallet(ethereumPrivateKey, provider)
-    const contract = new Contract(semaphoreAddress, sem.abi, signer)
-	const [groupCreatedEvent] = await getEvents(contract, "GroupCreated", [groupId], startBlock)
-
-    if (!groupCreatedEvent) {
-		throw new Error(`Group '${groupId}' not found`)
-    }
-	
-	const proofVerifiedEvents = await getEvents(contract, "ProofVerified", [groupId], startBlock)
-	
-    return proofVerifiedEvents.map((event) => ({
-            signal: event.signal.toString(),
-            merkleTreeRoot: event.merkleTreeRoot.toString(),
-            externalNullifier: event.externalNullifier.toString(),
-            nullifierHash: event.nullifierHash.toString()
-    }))
-}
-
-
-async function getGroupAdmin(groupId) {
-    const signer = new Wallet(ethereumPrivateKey, provider)
-    const contract = new Contract(semaphoreAddress, sem.abi, signer)
-	const groupAdminUpdatedEvents = await getEvents(contract, "GroupAdminUpdated", [groupId], startBlock)
-
-    if (groupAdminUpdatedEvents.length === 0) {
-		throw new Error(`Group '${groupId}' not found`)
-    }
-
-    return groupAdminUpdatedEvents[groupAdminUpdatedEvents.length - 1].newAdmin.toString()
-}
-
 async function joinId(identity) {
     const signer = new Wallet(ethereumPrivateKey, provider)
     const contract = new Contract(feedbackAddress, Feedback.abi, signer)	
@@ -150,36 +41,38 @@ async function joinId(identity) {
 async function sendFeebackId(users, identity, message) {
     const signer = new Wallet(ethereumPrivateKey, provider)
     const contract = new Contract(feedbackAddress, Feedback.abi, signer)	
-	var signal = BigInt(ethers.encodeBytes32String(message)).toString()
+	//var signal = BigInt(encodeBytes32String(message)).toString()
+	var signal = encodeBytes32String(message)
 
-	var group = new Group(GROUP_ID)
+	var group = new Group()
 	await group.addMembers(users) 
-	var pf = await generateProof(identity, group, GROUP_ID, signal, {wasmFilePath: "semaphore.wasm", zkeyFilePath: "semaphore.zkey"})
+	var pf = await generateProof(identity, group, signal, GROUP_ID)
 
 	var result = await verifyProof(pf, 20)
 	console.log(`proof result: ${result}`)
 
-	const { proof, merkleTreeRoot, nullifierHash } = pf
+	const { points, merkleTreeDepth, merkleTreeRoot, nullifier } = pf
 
-	const transaction = await contract.sendFeedback(signal, merkleTreeRoot, nullifierHash, proof)
+	const transaction = await contract.sendFeedback(merkleTreeDepth, merkleTreeRoot, nullifier, signal, points)
 }
 
 async function main() {
 	
-	//var semaphore = new SemaphoreEthers(network, {address: semaphoreAddress, provider:providerStr, startBlock:startBlock})
-	//console.log(await semaphore.getGroupIds())
+	var semaphore = new SemaphoreEthers(network, {address: semaphoreAddress, provider:providerStr, startBlock:startBlock})
+	console.log(await semaphore.getGroupIds())
 	//console.log(await semaphore.getGroupAdmin(GROUP_ID))
 	//console.log(await semaphore.getGroup(GROUP_ID))
 	//console.log(await semaphore.getGroupMembers(GROUP_ID))	
-	//console.log(await semaphore.getGroupValidatedProofs(GROUP_ID)
-	
+	//console.log(await semaphore.getGroupValidatedProofs(GROUP_ID))
+
 	switch(task) {
 		case 1: {
 			console.log(await semaphore.getGroupMembers(GROUP_ID));			
 			var proofs = await semaphore.getGroupValidatedProofs(GROUP_ID);
-			var signals = proofs.map(({signal}) => ethers.parseBytes32String(BigInt(signal).toHexString()));
+			var signals = proofs.map(({message}) => ethers.decodeBytes32String("0x"+ BigInt(message).toString(16)));
 			console.log(signals)
 			break;
+			
 		}
 		case 2: {
 			var id = new Identity(id_secret);
@@ -189,7 +82,7 @@ async function main() {
 		}
 		case 3: {
 			var id = new Identity(id_secret);
-			var _users = await getGroupMembers(GROUP_ID)
+			var _users = await semaphore.getGroupMembers(GROUP_ID)
 			var message = (new Date()).toLocaleTimeString();
 			console.log(`${id.commitment} send message ${message}`)
 			await sendFeebackId(_users, id, message)
@@ -198,13 +91,12 @@ async function main() {
 		case 4: {
 			var id=new Identity();
 			await joinId(id);
-			var _users = await getGroupMembers(GROUP_ID);
+			var _users = await semaphore.getGroupMembers(GROUP_ID);
 			var message = (new Date()).toLocaleTimeString();
 			console.log(`${id.commitment} send message ${message}`);
 			await sendFeebackId(_users, id, message);
-			var proofs = await getGroupVerifiedProofs(GROUP_ID);
-			//console.log(proofs);
-			var signals = proofs.map(({signal}) => ethers.parseBytes32String(BigInt.from(signal).toHexString()));
+			var proofs = await semaphore.getGroupValidatedProofs(GROUP_ID);			
+			var signals = proofs.map(({message}) => ethers.decodeBytes32String("0x"+ BigInt(message).toString(16)));
 			console.log(signals);
 			
 			break;
@@ -217,7 +109,3 @@ async function main() {
 }
 
 main().then(()=>{process.exit(0)})
-
-
-
-
