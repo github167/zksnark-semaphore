@@ -6,7 +6,6 @@ import sem from "./artifacts/@semaphore-protocol/contracts/Semaphore.sol/Semapho
 
 const GROUP_ID="0"
 const network_index = 0
-const id_secret = "hello5"
 const task = parseInt(process.argv[2])
  
 const network_profile = [
@@ -32,6 +31,8 @@ const network_profile = [
 
 var {network,semaphoreAddress,feedbackAddress,startBlock,providerStr,provider,ethereumPrivateKey} = network_profile[network_index]
 
+var semaphore = new SemaphoreEthers(network, {address: semaphoreAddress, provider:providerStr, startBlock:startBlock})
+
 async function joinId(identity) {
     const signer = new Wallet(ethereumPrivateKey, provider)
     const contract = new Contract(feedbackAddress, Feedback.abi, signer)	
@@ -44,9 +45,9 @@ async function sendFeebackId(users, identity, message) {
 	//var signal = BigInt(encodeBytes32String(message)).toString()
 	var signal = encodeBytes32String(message)
 
-	var group = new Group()
-	await group.addMembers(users) 
+	var group = new Group(users)
 	var pf = await generateProof(identity, group, signal, GROUP_ID)
+	
 
 	var result = await verifyProof(pf, 20)
 	console.log(`proof result: ${result}`)
@@ -58,7 +59,7 @@ async function sendFeebackId(users, identity, message) {
 
 async function main() {
 	
-	var semaphore = new SemaphoreEthers(network, {address: semaphoreAddress, provider:providerStr, startBlock:startBlock})
+
 	//console.log(await semaphore.getGroupIds())
 	//console.log(await semaphore.getGroupAdmin(GROUP_ID))
 	//console.log(await semaphore.getGroup(GROUP_ID))
@@ -67,28 +68,26 @@ async function main() {
 
 	switch(task) {
 		case 1: {
-			console.log(await semaphore.getGroupMembers(GROUP_ID));			
+			console.log("Network:", semaphore.network)
+			console.log("Semaphore Addr:", semaphore.options.address)			
+			console.log("Provider:", semaphore.options.provider)
+			console.log("All group IDs:", await semaphore.getGroupIds())
+			console.log("Current group ID:", await semaphore.getGroup(GROUP_ID))
+			console.log("Admin contract Addr:", await semaphore.contract.getGroupAdmin(GROUP_ID))
+			console.log("Group Members:", await semaphore.getGroupMembers(GROUP_ID));			
 			var proofs = await semaphore.getGroupValidatedProofs(GROUP_ID);
 			var signals = proofs.map(({message}) => ethers.decodeBytes32String("0x"+ BigInt(message).toString(16)));
-			console.log(signals)
+			console.log("Messages:", signals)
 			break;
 			
 		}
 		case 2: {
-			var id = new Identity(id_secret);
+			var id = new Identity();
 			await joinId(id);
 			console.log(`joining ${id.commitment}...`);
 			break;
 		}
 		case 3: {
-			var id = new Identity(id_secret);
-			var _users = await semaphore.getGroupMembers(GROUP_ID)
-			var message = (new Date()).toLocaleTimeString();
-			console.log(`${id.commitment} send message ${message}`)
-			await sendFeebackId(_users, id, message)
-			break
-		}
-		case 4: {
 			var id=new Identity();
 			await joinId(id);
 			var _users = await semaphore.getGroupMembers(GROUP_ID);
@@ -98,17 +97,15 @@ async function main() {
 			console.log(await semaphore.getGroupMembers(GROUP_ID));	
 			var proofs = await semaphore.getGroupValidatedProofs(GROUP_ID);			
 			var signals = proofs.map(({message}) => ethers.decodeBytes32String("0x"+ BigInt(message).toString(16)));
-			console.log(signals);
-			
+			console.log(signals);			
 			break;
 		}
 		default:
-			console.log("1: View\n2: Create fixed identity and join\n3: Send feedback (current time)\n4: 2(random identity)+3")
-			
+			console.log("1: Summary\n2: Create identity and join\n3: 2+Send feedback (current time)")	
 	}
-
-	
-
 }
 
 main().then(()=>{process.exit(0)})
+
+
+EOF
