@@ -59,7 +59,7 @@ async function sendFeebackId(users, identity, message) {
 async function main() {
 	
 	var semaphore = new SemaphoreEthers(network, {address: semaphoreAddress, provider:providerStr, startBlock:startBlock})
-	console.log(await semaphore.getGroupIds())
+	//console.log(await semaphore.getGroupIds())
 	//console.log(await semaphore.getGroupAdmin(GROUP_ID))
 	//console.log(await semaphore.getGroup(GROUP_ID))
 	//console.log(await semaphore.getGroupMembers(GROUP_ID))	
@@ -95,12 +95,15 @@ async function main() {
 			var message = (new Date()).toLocaleTimeString();
 			console.log(`${id.commitment} send message ${message}`);
 			await sendFeebackId(_users, id, message);
+			console.log(await semaphore.getGroupMembers(GROUP_ID));	
 			var proofs = await semaphore.getGroupValidatedProofs(GROUP_ID);			
 			var signals = proofs.map(({message}) => ethers.decodeBytes32String("0x"+ BigInt(message).toString(16)));
 			console.log(signals);
 			
 			break;
 		}
+		default:
+			console.log("1: View\n2: Create fixed identity and join\n3: Send feedback (current time)\n4: 2(random identity)+3")
 			
 	}
 
