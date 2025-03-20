@@ -14,7 +14,9 @@ sudo apt install yarn
 
 2. Create semaphore project
 ```
-npx @semaphore-protocol/cli create my-app --template monorepo-ethers
+git clone https://github.com/semaphore-protocol/boilerplate my-app
+# We can also create the project from scratch
+# npx @semaphore-protocol/cli create my-app --template monorepo-ethers
 cd my-app
 yarn install
 
