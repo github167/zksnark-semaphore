@@ -33,8 +33,6 @@ curl -s https://raw.githubusercontent.com/github167/zksnark-semaphore/main/semo-
 node semo-cli.mjs 1
 node semo-cli.mjs 3
 node semo-cli.mjs 3
-node semo-cli.mjs 3
-semo-cli.mjs 1
-semo-cli.mjs 1
+node semo-cli.mjs 1
 
 ```
