@@ -30,6 +30,7 @@ yarn dev:contracts
 ```
 cd ~/my-app/apps/contracts
 curl -s https://raw.githubusercontent.com/github167/zksnark-semaphore/main/semo-cli.mjs > semo-cli.mjs
+yarn deploy --semaphore 0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0 --network localhost # add one more group
 node semo-cli.mjs 1
 node semo-cli.mjs 3
 node semo-cli.mjs 3
