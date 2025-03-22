@@ -1,8 +1,8 @@
 import { Identity, generateProof, verifyProof, Group } from "@semaphore-protocol/core"
 import { SemaphoreEthers } from "@semaphore-protocol/data"
 import { ethers, encodeBytes32String, decodeBytes32String, Contract, Wallet } from "ethers"
-import Feedback from "./artifacts/contracts/Feedback.sol/Feedback.json" assert { type: "json" }
-import sem from "./artifacts/@semaphore-protocol/contracts/Semaphore.sol/Semaphore.json" assert { type: "json" }
+import Feedback from "./apps/contracts/artifacts/contracts/Feedback.sol/Feedback.json" assert { type: "json" }
+import sem from "./apps/contracts/artifacts/@semaphore-protocol/contracts/Semaphore.sol/Semaphore.json" assert { type: "json" }
 
 const GROUP_ID="0"
 const network_index = 0
